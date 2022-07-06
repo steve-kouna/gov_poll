@@ -29,6 +29,27 @@ public class Department {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    public Department() {
+    }
+
+    public Department(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
+    @PrePersist
+    private void postPersist(){
+        Instant dateTime = Instant.now();
+        this.createdAt = dateTime;
+    }
+
+    @PreUpdate
+    private void postUpdate() {
+        Instant dateTime = Instant.now();
+        this.updatedAt = dateTime;
+    }
+
+
     @OneToMany(mappedBy = "department")
     private Set<PersonalityDepartment> personalityDepartments = new LinkedHashSet<>();
 
