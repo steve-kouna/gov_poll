@@ -3,6 +3,7 @@ package biz.koona.gov_poll.entities;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -33,11 +34,40 @@ public class Personality {
     @Column(name = "biography")
     private String biography;
 
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
     @OneToMany(mappedBy = "personality")
     private Set<Personality> personalities = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "personality")
     private Set<PersonalityDepartment> personalityDepartments = new LinkedHashSet<>();
+
+    @PrePersist
+    private void postPersist(){
+        Instant dateTime = Instant.now();
+        this.createdAt = dateTime;
+    }
+
+    @PreUpdate
+    private void postUpdate() {
+        Instant dateTime = Instant.now();
+        this.updatedAt = dateTime;
+    }
+
+    public Personality() {
+    }
+
+    public Personality(Personality personality, FileCabinet picture, String firtname, String lastname, String biography) {
+        this.personality = personality;
+        this.picture = picture;
+        this.firtname = firtname;
+        this.lastname = lastname;
+        this.biography = biography;
+    }
 
     public Set<PersonalityDepartment> getPersonalityDepartments() {
         return personalityDepartments;
@@ -103,4 +133,19 @@ public class Personality {
         this.id = id;
     }
 
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

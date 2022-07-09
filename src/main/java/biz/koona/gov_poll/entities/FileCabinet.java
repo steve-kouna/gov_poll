@@ -23,6 +23,7 @@ public class FileCabinet {
     private String fileType;
 
     @Column(name = "data")
+    @Lob
     private byte[] data;
 
     @Column(name = "created_at", nullable = false)
@@ -33,6 +34,15 @@ public class FileCabinet {
 
     @OneToMany(mappedBy = "picture")
     private Set<User> users = new LinkedHashSet<>();
+
+    public FileCabinet() {
+    }
+
+    public FileCabinet(String fileName, String fileType, byte[] data) {
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.data = data;
+    }
 
     public Set<User> getUsers() {
         return users;
