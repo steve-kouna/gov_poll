@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class PersonalityForm {
+    private String pictureId;
     private String headId;
     @NotNull
     @NotBlank
@@ -18,11 +19,16 @@ public class PersonalityForm {
     public PersonalityForm() {
     }
 
-    public PersonalityForm(String headId, String firtname, String lastname, String biography) {
+    public PersonalityForm(String pictureId, String headId, String firtname, String lastname, String biography) {
+        this.pictureId = pictureId;
         this.headId = headId;
         this.firtname = firtname;
         this.lastname = lastname;
         this.biography = biography;
+    }
+
+    public String getPictureId() {
+        return pictureId;
     }
 
     public String getHeadId() {

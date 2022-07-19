@@ -35,6 +35,12 @@ public class FileCabinet {
     @OneToMany(mappedBy = "picture")
     private Set<User> users = new LinkedHashSet<>();
 
+    @PrePersist
+    private void postPersist(){
+        Instant dateTime = Instant.now();
+        this.createdAt = dateTime;
+    }
+
     public FileCabinet() {
     }
 

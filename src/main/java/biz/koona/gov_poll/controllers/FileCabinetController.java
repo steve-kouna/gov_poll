@@ -32,8 +32,8 @@ public class FileCabinetController {
 
     @PostMapping("/uploadFile")
     @Transactional
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("ownerId") String ownerId, @RequestParam("ownerType") String ownerType) {
-        FileCabinet dbFile = fileCabinetService.storeFile(file, ownerId, ownerType);
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+        FileCabinet dbFile = fileCabinetService.storeFile(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/rest/file-cabinet/downloadFile/")
@@ -46,21 +46,34 @@ public class FileCabinetController {
 
     @PostMapping("/uploadMultipleFiles")
     @Transactional
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files, @RequestParam("ownerId") String ownerId, @RequestParam("ownerType") String ownerType) {
+    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
                 .stream()
-                .map(file -> uploadFile(file, ownerId, ownerType))
+                .map(file -> uploadFile(file))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/downloadFile/{fileId}")
     @Transactional
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
+    public ResponseEntity<Resource> downloadFile(@PathVariable("fileId") String fileId) {
         FileCabinet dbFile = fileCabinetService.getFile(fileId);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(dbFile.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
                 .body(new ByteArrayResource(dbFile.getData()));
+    }
+
+    public UploadFileResponse gotFile(String id) {
+        System.out.println(id);
+        FileCabinet dbFile = fileCabinetService.getFile(id);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/rest/file-cabinet/downloadFile/")
+                .path(dbFile.getId())
+                .toUriString();
+
+        return new UploadFileResponse(fileDownloadUri,
+                dbFile.getFileType(), dbFile.getData().length, dbFile.getId());
     }
 }

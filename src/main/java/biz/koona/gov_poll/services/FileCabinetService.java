@@ -16,17 +16,13 @@ public class FileCabinetService {
     @Autowired
     private FileCabinetRepository fileCabinetRepository;
 
-    public FileCabinet storeFile(MultipartFile file, String ownerId, String ownerType) {
-        // Normalize file name
+    public FileCabinet storeFile(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         try {
-            // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
-
-//            DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes(), ownerId, ownerType);
             FileCabinet fileCabinet = new FileCabinet(fileName, file.getContentType(), file.getBytes());
 
             return fileCabinetRepository.save(fileCabinet);
@@ -36,6 +32,7 @@ public class FileCabinetService {
     }
 
     public FileCabinet getFile(String fileId) {
+        System.out.println(fileId);
         return fileCabinetRepository.findById(fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
     }
