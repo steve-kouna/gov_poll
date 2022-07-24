@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "email"})})
 public class User {
     @Id
     @GeneratedValue(generator = "uuid")
@@ -20,10 +20,10 @@ public class User {
     @JoinColumn(name = "picture_id")
     private FileCabinet picture;
 
-    @Column(name = "username", nullable = false, length = 45)
+    @Column(name = "username", nullable = false, length = 45, unique = true)
     private String username;
 
-    @Column(name = "email", nullable = false, length = 150)
+    @Column(name = "email", nullable = false, length = 150, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false, length = 256)
@@ -46,6 +46,19 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Opinion> opinions = new LinkedHashSet<>();
+
+    @PrePersist
+    private void postPersist(){
+        Instant dateTime = Instant.now();
+        this.createdAt = dateTime;
+    }
+
+    @PreUpdate
+    private void postUpdate() {
+        Instant dateTime = Instant.now();
+        this.updatedAt = dateTime;
+    }
+
 
     public Set<Opinion> getOpinions() {
         return opinions;
