@@ -1,11 +1,18 @@
 package biz.koona.gov_poll.controllers;
 
+import biz.koona.gov_poll.dtos.DepartmentDto;
+import biz.koona.gov_poll.dtos.PersonalityDepartmentDto;
 import biz.koona.gov_poll.dtos.PersonalityDto;
 import biz.koona.gov_poll.dtos.UploadFileResponse;
+import biz.koona.gov_poll.entities.Department;
 import biz.koona.gov_poll.entities.FileCabinet;
 import biz.koona.gov_poll.entities.Personality;
+import biz.koona.gov_poll.entities.PersonalityDepartment;
+import biz.koona.gov_poll.forms.PersonalityDepartmentForm;
 import biz.koona.gov_poll.forms.PersonalityForm;
+import biz.koona.gov_poll.services.DepartmentService;
 import biz.koona.gov_poll.services.FileCabinetService;
+import biz.koona.gov_poll.services.PersonalityDepartmentService;
 import biz.koona.gov_poll.services.PersonalityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +29,12 @@ public class PersonalityController {
     private PersonalityService personalityService;
     @Autowired
     private FileCabinetService fileCabinetService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private PersonalityDepartmentService personalityDepartmentService;
 
     @PostMapping
     @Transactional
@@ -49,7 +62,7 @@ public class PersonalityController {
         return personalityDtos;
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Transactional
     public PersonalityDto putPersonality(@PathVariable("id") String id, @Validated @RequestBody PersonalityForm personalityForm) {
         Personality personality = personalityService.readOne(id);
@@ -64,4 +77,31 @@ public class PersonalityController {
         return personalityDto;
     }
 
+    @PostMapping("/{persoId}/departments/{depId}")
+    @Transactional
+    public PersonalityDepartmentDto addPersonalityDepartment(@PathVariable("persoId") String persoId, @PathVariable("depId") String depId, PersonalityDepartmentForm form){
+        PersonalityDepartment personalityDepartment = new PersonalityDepartment();
+        Personality personality = personalityService.readOne(persoId);
+        Department department = departmentService.readOne(depId);
+
+        personalityDepartment.setDepartment(department);
+        personalityDepartment.setPersonality(personality);
+        personalityDepartment.setStartedAt(form.getStartedAt());
+        personalityDepartment.setFinishIt(form.getFinishIt());
+
+        personalityDepartment = personalityDepartmentService.createUpdate(personalityDepartment);
+
+        DepartmentDto departmentDto = new DepartmentDto(department.getId(), department.getTitle(), department.getDescription());
+        PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirtname(), personality.getLastname(), personality.getBiography());
+        UploadFileResponse image = new UploadFileResponse();
+
+        PersonalityDepartmentDto personalityDepartmentDto = new PersonalityDepartmentDto(
+                personalityDepartment.getId(),
+                personalityDto,
+                departmentDto,
+                image
+        );
+
+        return personalityDepartmentDto;
+    }
 }
