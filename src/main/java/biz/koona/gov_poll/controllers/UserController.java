@@ -2,15 +2,13 @@ package biz.koona.gov_poll.controllers;
 
 import biz.koona.gov_poll.dtos.UserDto;
 import biz.koona.gov_poll.entities.User;
+import biz.koona.gov_poll.forms.user.ChangePassword;
 import biz.koona.gov_poll.forms.user.RegisterForm;
 import biz.koona.gov_poll.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rest/accounts")
@@ -25,6 +23,19 @@ public class UserController {
         user.setEmail(registerForm.getEmail());
         user.setUsername(registerForm.getUsername());
         user.setPassword(registerForm.getPassword());
+        user = userService.createUpdate(user);
+
+        UserDto userDto = new UserDto(user.getUsername(), user.getEmail());
+
+        return userDto;
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public UserDto changePassword(@Validated @RequestBody ChangePassword changePassword,@PathVariable("id") String id) {
+        User user = userService.readOne(id);
+        user.setPassword(changePassword.getNewPassword());
+
         user = userService.createUpdate(user);
 
         UserDto userDto = new UserDto(user.getUsername(), user.getEmail());
