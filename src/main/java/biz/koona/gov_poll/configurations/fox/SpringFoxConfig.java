@@ -1,4 +1,4 @@
-package biz.koona.gov_poll.configurations;
+package biz.koona.gov_poll.configurations.fox;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

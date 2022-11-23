@@ -16,6 +16,10 @@ public class Department {
     @Column(name = "id", nullable = false, length = 45)
     private String id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
+
     @Column(name = "title", length = 45)
     private String title;
 
@@ -33,6 +37,12 @@ public class Department {
     }
 
     public Department(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
+    public Department(Department department, String title, String description) {
+        this.department = department;
         this.title = title;
         this.description = description;
     }
@@ -99,5 +109,13 @@ public class Department {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

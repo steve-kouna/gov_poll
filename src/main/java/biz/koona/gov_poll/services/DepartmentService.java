@@ -19,6 +19,10 @@ public class DepartmentService {
         return departmentRepository.findById(id).get();
     }
 
+    public Iterable<Department> readSubDepartment(Department department) {
+        return departmentRepository.findByDepartment(department);
+    }
+
     public Iterable<Department> readAll() {
         return departmentRepository.findAll();
     }

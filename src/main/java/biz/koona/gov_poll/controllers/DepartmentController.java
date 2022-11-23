@@ -21,7 +21,8 @@ public class DepartmentController {
     @PostMapping
     @Transactional
     public DepartmentDto postDepartment(@Validated @RequestBody DepartmentForm departmentForm) {
-        Department department = new Department(departmentForm.getTitle(), departmentForm.getDescription());
+        Department parent = departmentService.readOne(departmentForm.getParentDepartmentId());
+        Department department = new Department(parent, departmentForm.getTitle(), departmentForm.getDescription());
         department = departmentService.createUpdate(department);
 
         DepartmentDto departmentDto = new DepartmentDto(department.getId(), department.getTitle(), department.getDescription());
@@ -49,6 +50,21 @@ public class DepartmentController {
         Department department = departmentService.readOne(id);
         DepartmentDto departmentDto = new DepartmentDto(department.getId(), department.getTitle(), department.getDescription());
         return  departmentDto;
+    }
+
+    @GetMapping("/{id}/sub-departments")
+    @Transactional
+    public Iterable<DepartmentDto> getSubDepartments(@PathVariable("id") String id) {
+        Department depart = departmentService.readOne(id);
+        Iterable<Department> departments = departmentService.readSubDepartment(depart);
+        List<DepartmentDto> departmentDtos = new ArrayList<>();
+
+        departments.forEach(department -> {
+            DepartmentDto departmentDto = new DepartmentDto(department.getId(), department.getTitle(), department.getDescription());
+            departmentDtos.add(departmentDto);
+        });
+
+        return  departmentDtos;
     }
 
     @PutMapping("/{id}")

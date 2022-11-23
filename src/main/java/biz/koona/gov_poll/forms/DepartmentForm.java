@@ -11,12 +11,15 @@ public class DepartmentForm {
     @NotNull
     private String description;
 
+    private String parentDepartmentId = null;
+
     public DepartmentForm() {
     }
 
-    public DepartmentForm(String title, String description) {
+    public DepartmentForm(String title, String description, String parentDepartmentId) {
         this.title = title;
         this.description = description;
+        this.parentDepartmentId = parentDepartmentId;
     }
 
     public String getTitle() {
@@ -25,5 +28,9 @@ public class DepartmentForm {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getParentDepartmentId() {
+        return parentDepartmentId;
     }
 }

@@ -1,5 +1,7 @@
 package biz.koona.gov_poll.dtos;
 
+import java.util.Set;
+
 public class DepartmentDto {
     private String id;
     private String title;
