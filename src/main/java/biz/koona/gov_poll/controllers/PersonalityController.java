@@ -40,12 +40,13 @@ public class PersonalityController {
     @Transactional
     public PersonalityDto postPersonalty(@Validated @RequestBody PersonalityForm personalityForm) {
         FileCabinet picture = fileCabinetService.getFile(personalityForm.getPictureId());
+
         Personality headOfDepartment = personalityForm.getHeadId() != null? personalityService.readOne(personalityForm.getHeadId()):null;
 
-        Personality personality = new Personality(headOfDepartment, picture, personalityForm.getFirtname(), personalityForm.getFirtname(), personalityForm.getBiography());
+        Personality personality = new Personality(headOfDepartment, picture, personalityForm.getFirstname(), personalityForm.getFirstname(), personalityForm.getBiography());
         personality = personalityService.createUpdate(personality);
 
-        PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirtname(), personality.getLastname(), personality.getBiography());
+        PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirstname(), personality.getLastname(), personality.getBiography());
         return personalityDto;
     }
 
@@ -56,7 +57,7 @@ public class PersonalityController {
         List<PersonalityDto> personalityDtos = new ArrayList<>();
 
         personalities.forEach(personality -> {
-            PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirtname(), personality.getLastname(), personality.getBiography());
+            PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirstname(), personality.getLastname(), personality.getBiography());
             personalityDtos.add(personalityDto);
         });
         return personalityDtos;
@@ -69,10 +70,10 @@ public class PersonalityController {
         Personality parent = personalityService.readOne(personalityForm.getHeadId());
         personality.setPersonality(parent);
         personality.setBiography(personalityForm.getBiography());
-        personality.setFirtname(personalityForm.getFirtname());
+        personality.setFirstname(personalityForm.getFirstname());
         personality.setLastname(personalityForm.getLastname());
 
-        PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirtname(), personality.getLastname(), personality.getBiography());
+        PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirstname(), personality.getLastname(), personality.getBiography());
 
         return personalityDto;
     }
@@ -92,7 +93,7 @@ public class PersonalityController {
         personalityDepartment = personalityDepartmentService.createUpdate(personalityDepartment);
 
         DepartmentDto departmentDto = new DepartmentDto(department.getId(), department.getTitle(), department.getDescription());
-        PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirtname(), personality.getLastname(), personality.getBiography());
+        PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirstname(), personality.getLastname(), personality.getBiography());
         UploadFileResponse image = new UploadFileResponse();
 
         PersonalityDepartmentDto personalityDepartmentDto = new PersonalityDepartmentDto(

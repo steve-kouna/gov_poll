@@ -2,16 +2,16 @@ package biz.koona.gov_poll.dtos;
 
 public class PersonalityDto {
     private String id;
-    private String firtname;
+    private String firstname;
     private String lastname;
     private String biography;
 
     public PersonalityDto() {
     }
 
-    public PersonalityDto(String id, String firtname, String lastname, String biography) {
+    public PersonalityDto(String id, String firstname, String lastname, String biography) {
         this.id = id;
-        this.firtname = firtname;
+        this.firstname = firstname;
         this.lastname = lastname;
         this.biography = biography;
     }
@@ -20,8 +20,8 @@ public class PersonalityDto {
         return id;
     }
 
-    public String getFirtname() {
-        return firtname;
+    public String getFirstname() {
+        return firstname;
     }
 
     public String getLastname() {

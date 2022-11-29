@@ -4,11 +4,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class PersonalityForm {
-    private String pictureId;
-    private String headId;
+    private String pictureId = null;
+    private String headId = null;
     @NotNull
     @NotBlank
-    private String firtname;
+    private String firstname;
     @NotNull
     @NotBlank
     private String lastname;
@@ -19,10 +19,10 @@ public class PersonalityForm {
     public PersonalityForm() {
     }
 
-    public PersonalityForm(String pictureId, String headId, String firtname, String lastname, String biography) {
+    public PersonalityForm(String pictureId, String headId, String firstname, String lastname, String biography) {
         this.pictureId = pictureId;
         this.headId = headId;
-        this.firtname = firtname;
+        this.firstname = firstname;
         this.lastname = lastname;
         this.biography = biography;
     }
@@ -35,8 +35,8 @@ public class PersonalityForm {
         return headId;
     }
 
-    public String getFirtname() {
-        return firtname;
+    public String getFirstname() {
+        return firstname;
     }
 
     public String getLastname() {

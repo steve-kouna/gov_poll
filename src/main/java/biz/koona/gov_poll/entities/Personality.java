@@ -24,8 +24,8 @@ public class Personality {
     @JoinColumn(name = "picture_id")
     private FileCabinet picture;
 
-    @Column(name = "firtname", nullable = false, length = 45)
-    private String firtname;
+    @Column(name = "firstname", nullable = false, length = 45)
+    private String firstname;
 
     @Column(name = "lastname", nullable = false, length = 45)
     private String lastname;
@@ -61,10 +61,10 @@ public class Personality {
     public Personality() {
     }
 
-    public Personality(Personality personality, FileCabinet picture, String firtname, String lastname, String biography) {
+    public Personality(Personality personality, FileCabinet picture, String firstname, String lastname, String biography) {
         this.personality = personality;
         this.picture = picture;
-        this.firtname = firtname;
+        this.firstname = firstname;
         this.lastname = lastname;
         this.biography = biography;
     }
@@ -101,12 +101,12 @@ public class Personality {
         this.lastname = lastname;
     }
 
-    public String getFirtname() {
-        return firtname;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirtname(String firtname) {
-        this.firtname = firtname;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
     public FileCabinet getPicture() {
