@@ -80,7 +80,7 @@ public class PersonalityController {
 
     @PostMapping("/{persoId}/departments/{depId}")
     @Transactional
-    public PersonalityDepartmentDto addPersonalityDepartment(@PathVariable("persoId") String persoId, @PathVariable("depId") String depId, PersonalityDepartmentForm form){
+    public PersonalityDepartmentDto addPersonalityDepartment(@PathVariable("persoId") String persoId, @PathVariable("depId") String depId, @RequestBody PersonalityDepartmentForm form){
         PersonalityDepartment personalityDepartment = new PersonalityDepartment();
         Personality personality = personalityService.readOne(persoId);
         Department department = departmentService.readOne(depId);

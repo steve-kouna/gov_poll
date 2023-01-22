@@ -122,4 +122,15 @@ public class Opinion {
         this.id = id;
     }
 
+    @PrePersist
+    private void postPersist() {
+        Instant dateTime = Instant.now();
+        this.createdAt = dateTime;
+    }
+
+    @PreUpdate
+    private void postUpdate() {
+        Instant dateTime = Instant.now();
+        this.updatedAt = dateTime;
+    }
 }

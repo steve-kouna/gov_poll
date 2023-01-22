@@ -13,6 +13,12 @@ public class PersonalityDepartmentDto {
         this.image = image;
     }
 
+    public PersonalityDepartmentDto(String id, PersonalityDto personalityDto, DepartmentDto departmentDto) {
+        this.id = id;
+        this.personalityDto = personalityDto;
+        this.departmentDto = departmentDto;
+    }
+
     public String getId() {
         return id;
     }

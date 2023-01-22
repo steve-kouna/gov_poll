@@ -6,9 +6,6 @@ public class PersonalityDto {
     private String lastname;
     private String biography;
 
-    public PersonalityDto() {
-    }
-
     public PersonalityDto(String id, String firstname, String lastname, String biography) {
         this.id = id;
         this.firstname = firstname;

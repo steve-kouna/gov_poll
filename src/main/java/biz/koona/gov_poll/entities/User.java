@@ -1,15 +1,18 @@
 package biz.koona.gov_poll.entities;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "email"})})
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -29,8 +32,8 @@ public class User {
     @Column(name = "password", nullable = false, length = 256)
     private String password;
 
-    @Column(name = "active")
-    private Integer active;
+    @Column(name = "account_non_locked")
+    private boolean accountNonLocked;
 
     @Column(name = "activated_at")
     private Instant activatedAt;
@@ -46,6 +49,17 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Opinion> opinions = new LinkedHashSet<>();
+
+    public User() {
+    }
+
+    public User(String id, String username, String email, String password, boolean accountNonLocked) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.accountNonLocked = accountNonLocked;
+    }
 
     @PrePersist
     private void postPersist(){
@@ -100,12 +114,9 @@ public class User {
         this.activatedAt = activatedAt;
     }
 
-    public Integer getActive() {
-        return active;
-    }
-
-    public void setActive(Integer active) {
-        this.active = active;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
     public String getPassword() {
@@ -128,6 +139,26 @@ public class User {
         return username;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -148,4 +179,7 @@ public class User {
         this.id = id;
     }
 
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
 }

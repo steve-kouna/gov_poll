@@ -6,6 +6,7 @@ import biz.koona.gov_poll.forms.user.ChangePassword;
 import biz.koona.gov_poll.forms.user.RegisterForm;
 import biz.koona.gov_poll.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping
     @Transactional
@@ -22,7 +25,9 @@ public class UserController {
         User user = new User();
         user.setEmail(registerForm.getEmail());
         user.setUsername(registerForm.getUsername());
-        user.setPassword(registerForm.getPassword());
+        user.setPassword(passwordEncoder.encode(registerForm.getPassword()));
+        user.setAccountNonLocked(true);
+
         user = userService.createUpdate(user);
 
         UserDto userDto = new UserDto(user.getUsername(), user.getEmail());

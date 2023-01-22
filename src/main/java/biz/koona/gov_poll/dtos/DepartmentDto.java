@@ -7,9 +7,6 @@ public class DepartmentDto {
     private String title;
     private String description;
 
-    public DepartmentDto() {
-    }
-
     public DepartmentDto(String id, String title, String description) {
         this.id = id;
         this.title = title;

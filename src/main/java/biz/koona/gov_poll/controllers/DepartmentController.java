@@ -21,7 +21,7 @@ public class DepartmentController {
     @PostMapping
     @Transactional
     public DepartmentDto postDepartment(@Validated @RequestBody DepartmentForm departmentForm) {
-        Department parent = departmentService.readOne(departmentForm.getParentDepartmentId());
+        Department parent = departmentForm.getParentDepartmentId() != null ? departmentService.readOne(departmentForm.getParentDepartmentId()) : null;
         Department department = new Department(parent, departmentForm.getTitle(), departmentForm.getDescription());
         department = departmentService.createUpdate(department);
 

@@ -1,5 +1,6 @@
 package biz.koona.gov_poll.services;
 
+import biz.koona.gov_poll.entities.Department;
 import biz.koona.gov_poll.entities.PersonalityDepartment;
 import biz.koona.gov_poll.repositories.PersonalityDepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,9 @@ public class PersonalityDepartmentService {
 
     public Iterable<PersonalityDepartment> readAll() {
         return personalityDepartmentRepository.findAll();
+    }
+
+    public PersonalityDepartment readByDepartment(Department department) {
+        return personalityDepartmentRepository.findByDepartment(department);
     }
 }
