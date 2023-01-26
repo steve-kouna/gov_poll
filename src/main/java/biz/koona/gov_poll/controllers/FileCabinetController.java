@@ -2,6 +2,7 @@ package biz.koona.gov_poll.controllers;
 
 import biz.koona.gov_poll.dtos.UploadFileResponse;
 import biz.koona.gov_poll.entities.FileCabinet;
+import biz.koona.gov_poll.helpers.Helpers;
 import biz.koona.gov_poll.services.FileCabinetService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -29,16 +30,15 @@ public class FileCabinetController {
 
     @Autowired
     private FileCabinetService fileCabinetService;
+    @Autowired
+    private Helpers helpers;
 
     @PostMapping("/uploadFile")
     @Transactional
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
         FileCabinet dbFile = fileCabinetService.storeFile(file);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/rest/file-cabinet/downloadFile/")
-                .path(dbFile.getId())
-                .toUriString();
+        String fileDownloadUri = helpers.fileGenerateUri(dbFile);
 
         return new UploadFileResponse(fileDownloadUri,
                 file.getContentType(), file.getSize(), dbFile.getId());
@@ -68,10 +68,7 @@ public class FileCabinetController {
         System.out.println(id);
         FileCabinet dbFile = fileCabinetService.getFile(id);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/rest/file-cabinet/downloadFile/")
-                .path(dbFile.getId())
-                .toUriString();
+        String fileDownloadUri = helpers.fileGenerateUri(dbFile);
 
         return new UploadFileResponse(fileDownloadUri,
                 dbFile.getFileType(), dbFile.getData().length, dbFile.getId());

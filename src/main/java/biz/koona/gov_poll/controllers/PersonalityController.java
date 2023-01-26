@@ -10,6 +10,7 @@ import biz.koona.gov_poll.entities.Personality;
 import biz.koona.gov_poll.entities.PersonalityDepartment;
 import biz.koona.gov_poll.forms.PersonalityDepartmentForm;
 import biz.koona.gov_poll.forms.PersonalityForm;
+import biz.koona.gov_poll.helpers.Helpers;
 import biz.koona.gov_poll.services.DepartmentService;
 import biz.koona.gov_poll.services.FileCabinetService;
 import biz.koona.gov_poll.services.PersonalityDepartmentService;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class PersonalityController {
 
     @Autowired
     private PersonalityDepartmentService personalityDepartmentService;
+    @Autowired
+    private Helpers helpers;
 
     @PostMapping
     @Transactional
@@ -84,6 +88,7 @@ public class PersonalityController {
         PersonalityDepartment personalityDepartment = new PersonalityDepartment();
         Personality personality = personalityService.readOne(persoId);
         Department department = departmentService.readOne(depId);
+        FileCabinet dbFile = fileCabinetService.getFile(personality.getPicture().getId());
 
         personalityDepartment.setDepartment(department);
         personalityDepartment.setPersonality(personality);
@@ -94,7 +99,11 @@ public class PersonalityController {
 
         DepartmentDto departmentDto = new DepartmentDto(department.getId(), department.getTitle(), department.getDescription());
         PersonalityDto personalityDto = new PersonalityDto(personality.getId(), personality.getFirstname(), personality.getLastname(), personality.getBiography());
-        UploadFileResponse image = new UploadFileResponse();
+
+        // Image
+        //String fileDownloadUri = fileGenerateUri(dbFile);
+        String fileDownloadUri = helpers.fileGenerateUri(dbFile);
+        UploadFileResponse image = new UploadFileResponse(fileDownloadUri, dbFile.getFileType(), dbFile.getData().length, dbFile.getId());
 
         PersonalityDepartmentDto personalityDepartmentDto = new PersonalityDepartmentDto(
                 personalityDepartment.getId(),

@@ -10,6 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest/opinions")
@@ -78,5 +80,12 @@ public class OpinionController {
                 opinion.getFrom(), opinion.getTo(), opinion.getCreatedAt(), opinion.getUpdatedAt());
 
         return opinionDto;
+    }
+    @GetMapping
+    public List<OpinionDto> getOpinions() {
+        Iterable<Opinion> opinions = opinionService.readAll();
+        List<OpinionDto> opinionDtos = new ArrayList<>();
+
+        return opinionDtos;
     }
 }
